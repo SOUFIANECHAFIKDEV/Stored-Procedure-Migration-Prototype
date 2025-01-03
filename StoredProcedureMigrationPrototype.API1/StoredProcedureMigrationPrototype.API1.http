@@ -1,0 +1,6 @@
+@StoredProcedureMigrationPrototype.API1_HostAddress = http://localhost:5112
+
+GET {{StoredProcedureMigrationPrototype.API1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

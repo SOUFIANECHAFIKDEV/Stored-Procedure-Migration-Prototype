@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DataAccessLayer\Procedures\ExternalDb\AnotherExternalDb\AnotherExternalDb.sql" />
+    <None Remove="DataAccessLayer\Procedures\ExternalDb\DataSynchronization\DataSynchronization.sql" />
+    <None Remove="DataAccessLayer\Procedures\MainDb\SyncData1Api2\SyncData1Api2.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DataAccessLayer\Procedures\ExternalDb\AnotherExternalDb\AnotherExternalDb.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataAccessLayer\Procedures\ExternalDb\DataSynchronization\DataSynchronization.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataAccessLayer\Procedures\MainDb\SyncData1Api2\SyncData1Api2.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StoredProcedureMigrationPrototype.Data\StoredProcedureMigrationPrototype.Data.csproj" />
+    <ProjectReference Include="..\StoredProcedureMigrationPrototype.Shared\StoredProcedureMigrationPrototype.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataAccessLayer\Mappings\" />
+    <Folder Include="DataAccessLayer\Migrations\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,75 @@
+@OK 1. genrate the migration for api
+@OK 2. genrate migratios on many dbs for one dbcontext 
+3. migration for procedures
+4. appply the prtotype for the real project 
+5. geemreate waht i need to say in the solution presentation
+
+-------------------------------
+
+
+i will give you a example
+***** Setp 1
+- i dont have any migration in my api
+- i have a juste one entity Product with columns (id, name) configured to the api dbcontext
+- when i execute (dotnet ef migrations add ...) to generate the migration file and execute update database to applly the migration in the database
+i dont want to create that table in the database because he is alrady created manulay using a sql script so dont detect those changes
+
+***** Step 2
+- i want to apply tow changes to my api database
+- first change is : in the product entity i rename the column (name) to (productName) and add new column (description)
+- second change is : i add a new entity to the db context named Customer with entites (id, CustomerName)
+- so when i execute the (dotnet ef migrations add ...) coomand to generate the migration file for the tow changes i made and update database to applly the migration in the database
+i want apply them succefly
+--------------------------------
+summary of the situation is i have entities alrady created in the db mannuly using sql script, and when i start using ef automigration to manages db changes for the first time 
+i want to exculde those entites, and after that i want to add apply changes in those entites and detect and update those changes in the db
+
+
+----------------------------------------------
+/Database
+   /Migrations          // Auto-generated EF Core migrations
+       20240101_AddNewTable.cs
+       20240115_UpdateColumns.cs
+   /SqlScripts          // Custom SQL scripts
+       /Procedures      // For stored procedures
+           CreateSyncProc.sql
+           UpdateSyncProc.sql
+       /Functions       // For SQL functions
+           CalculateTotals.sql
+       /Triggers        // For database triggers
+           TriggerInsertLog.sql
+       /Views           // For database views
+           ActiveProjectsView.sql
+   /SeedData            // Scripts for seeding data
+       SeedInitialData.sql
+-------------------------------------------------------
+
+now to contenue my prototype, i need to add sql stored procedures auto update, here an exemple :
+in my api i have folders architecture like that 
+
+/Properties
+/Controllers
+/DataAccessLayer
+    /Context // Api1DbContext data base context configuration with entites dbset configuration from 'StoredProcedureMigrationPrototype.Data' class library 
+    /Mappings // contains mapping profile between entities and dtos
+    /Migrations // Auto-generated EF Core migrations
+    /Models // contains dtos 
+    /Procedures //this folder suposed have contains all the api db procedures hadling, for this example we have 2 procedure in the api db (SyncData1 and SyncData2) and we can add more
+        /SyncData1 //this folder name with the real name of a stored procedure used in the db
+            Migrations //this folder name with the real name of a stored procedure used in the db
+            (SyncData1.cs or SyncData1.sql) //supposed to contains the stored procedure script, you decide wich the best type of this file cs or sql base on my requerement for this prototype
+        /SyncData2
+            Migrations //this folder name with the real name of a stored procedure used in the db
+            (SyncData2.cs or SyncData2.sql) //supposed to contains the stored procedure script, you decide wich the best type of this file cs or sql base on my requerement for this prototype
+
+
+this steps to do sumulation of prototype requirement 
+step 1: i create a new stored procedure script creation or modification named SyncData1 how contains logic that i want to apply manully
+step 2: i want to add this script to /DataAccessLayer/Procedures/SyncData1/SyncData1.cs
+step 3: when i start the api, i want to generate create a migration file for this procedure in /DataAccessLayer/Procedures/SyncData1/Migrations 
+        how contains the new changes and old changes to rollback like we do mith entites auto migrations, and apply the new script to the api db
+step 4 : i want to modify the stored procedure SyncData1 script and when i start the api i want to detect this changes and create for them a new migration file /DataAccessLayer/Procedures/SyncData1/Migrations 
+        and apply the new script in the database
+
+note about steps to do sumulation of prototype requirement:
+the executin of SyncData1 procedure script in the api starting happend juste if we add new version of the procedure not every time so we need to track them like emtities (__EFMigrationsHistory)
